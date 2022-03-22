@@ -2,20 +2,31 @@ package net.cyberplanete.a7minutesWorkout_kotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
 import android.widget.Toast
+import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private var bindingViewMainActivity : ActivityMainBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         /**
-         * Création de ma variable qui hérite d'un frameLayout
-         *
+         * Prepare binding objet to be used by setContentView
          */
-        val flStartButton : FrameLayout = findViewById(R.id.frame_layout_start)
-        flStartButton.setOnClickListener{
+        bindingViewMainActivity = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(bindingViewMainActivity?.root)
+
+        bindingViewMainActivity?.frameLayoutStart?.setOnClickListener{
             Toast.makeText(this,"Here we will start the exercise", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * To avoid memory leak
+      */
+    override fun onDestroy()
+    {
+        super.onDestroy()
+        bindingViewMainActivity = null
     }
 }
