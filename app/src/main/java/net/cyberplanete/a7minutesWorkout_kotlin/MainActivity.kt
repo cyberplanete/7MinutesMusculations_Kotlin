@@ -1,5 +1,6 @@
 package net.cyberplanete.a7minutesWorkout_kotlin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -18,6 +19,12 @@ class MainActivity : AppCompatActivity() {
 
         bindingViewMainActivity?.frameLayoutStart?.setOnClickListener{
             Toast.makeText(this,"Here we will start the exercise", Toast.LENGTH_SHORT).show()
+
+            /**
+             * Démarrer la page ExcerciseActivity
+              */
+        val intentExerciceActivity = Intent(this, ExerciseActivity::class.java)
+        startActivity(intentExerciceActivity)
         }
     }
 
