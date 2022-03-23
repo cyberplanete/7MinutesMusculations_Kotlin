@@ -22,7 +22,7 @@ class ExerciseActivity : AppCompatActivity() {
         }
 
 
-        bindingExcerciseActivity?.toolbarExcercise?.setOnClickListener()
+        bindingExcerciseActivity?.toolbarExcercise?.setNavigationOnClickListener()
         {
             onBackPressed()
         }
