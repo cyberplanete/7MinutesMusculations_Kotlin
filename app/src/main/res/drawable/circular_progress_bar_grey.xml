@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- Permet un effet d'augmentation de la progressBar  useLevel permet de faire apparaitre le cercle gris -->
+
     <item>
         <shape
             android:innerRadiusRatio="2.7"
             android:shape="ring"
             android:thicknessRatio="50.0"
-            android:useLevel="true">
+            android:useLevel="false">
             <solid android:color="@color/colorLightGrey"></solid>
         </shape>
     </item>
