@@ -6,6 +6,8 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBinding
+import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
+import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceModel
 
 class ExerciseActivity : AppCompatActivity() {
 
@@ -14,7 +16,10 @@ class ExerciseActivity : AppCompatActivity() {
     private var restProgress = 0
 
     private var compteARebourExcercice: CountDownTimer? = null
-    private var restTimerProgressBarExcercice = 0
+    private var timerProgressBarExcercice = 0
+
+    private var exerciceList: ArrayList<ExerciceModel>? = null
+    private var currentExercicePosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +30,11 @@ class ExerciseActivity : AppCompatActivity() {
         setSupportActionBar(bindingExcerciseActivity?.toolbarExcercise)
 
         if (supportActionBar != null)
-        {
+        {/* Afficher la fleche pour permettre le retour*/
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
-
+        /* Initialisation de l'exercice par defaut  */
+        exerciceList = Constants.defaultExerciceList()
 
         bindingExcerciseActivity?.toolbarExcercise?.setNavigationOnClickListener()
         {
@@ -37,7 +43,7 @@ class ExerciseActivity : AppCompatActivity() {
         /*
         Verification que le timer n'est pas déja en fonctionnement
          */
-        setupRestView()
+        setupMainView()
 
 
     }
@@ -46,33 +52,27 @@ class ExerciseActivity : AppCompatActivity() {
      * Cette fonction permet de s'assurer que le timer n'est pas deja en marche ex: Après un click sur retour puis à nouveau start
      * Si oui, il est reintialisé
      */
-    private fun setupRestView() {
+    private fun setupMainView() {
+        /* Le Timer précedent est invisible si view.gone la contrainte du text view est perdue app:layout_constraintBottom_toTopOf="@id/flProgressBarTimerForStart" et est mal positionnée */
+        bindingExcerciseActivity?.flMainViewTimer?.visibility = View.VISIBLE
+        /* Le titre au dessus du timer est configuré invisible*/
+        bindingExcerciseActivity?.tvTitle?.visibility = View.VISIBLE
+        /* Le timer pour l'excercice est affiché */
+        bindingExcerciseActivity?.flExcerciceView?.visibility = View.INVISIBLE
+        /*Affichage du nom de l'exercice -  setVisible */
+        bindingExcerciseActivity?.tvExerciceName?.visibility = View.INVISIBLE
+        /*Affichage de l'image de l'exercice*/
+        bindingExcerciseActivity?.ivImage?.visibility = View.INVISIBLE
         if (compteARebour != null)
         {
             compteARebour?.cancel()
             restProgress = 0
         }
-        setRestProgressBar()
+        setupTimerMainView()
     }
 
 
-    private fun setupRestViewExercice() {
-        /* Le Timer précedent est invisible si view.gone la contrainte du text view est perdue app:layout_constraintBottom_toTopOf="@id/flProgressBarTimerForStart" et est mal positionnée */
-        bindingExcerciseActivity?.flProgressBarTimerForStart?.visibility = View.INVISIBLE
-        /* Le titre au dessus du timer est modifié*/
-        bindingExcerciseActivity?.tvTitle?.text = "Nom de l'exercice"
-        /* Le timer pour l'excercice est affiché */
-        bindingExcerciseActivity?.flProgressBarTimerForExcercice?.visibility = View.VISIBLE
-        /* Cette fonction permet de s'assurer que le timer n'est pas deja en marche */
-        if (compteARebourExcercice != null)
-        {
-            compteARebourExcercice?.cancel()
-            restTimerProgressBarExcercice = 0
-        }
-        setRestTimerProgressBarExcercice()
-    }
-
-    private fun setRestProgressBar()
+    private fun setupTimerMainView()
     {
         bindingExcerciseActivity?.progressBar?.progress = restProgress
         /**
@@ -93,17 +93,45 @@ class ExerciseActivity : AppCompatActivity() {
 
             override fun onFinish() {
                 Toast.makeText(this@ExerciseActivity,"Here we will start the excercice.", Toast.LENGTH_SHORT).show()
+                /* currentExercicePosition etant initialisé à -1. il passe à 0 */
+                currentExercicePosition++
                 /* Quand le timer de démmarage est terminé, je lance le timer pour l'excercice */
-                setupRestViewExercice()
+                setupViewExercice()
             }
 
         }.start()
+    }
+    /**
+     * Affichage des éléments pour la page exercice
+     */
+    private fun setupViewExercice() {
+        /* Le Timer précedent est invisible si view.gone la contrainte du text view est perdue app:layout_constraintBottom_toTopOf="@id/flProgressBarTimerForStart" et est mal positionnée */
+        bindingExcerciseActivity?.flMainViewTimer?.visibility = View.INVISIBLE
+        /* Le titre au dessus du timer est configuré invisible*/
+        bindingExcerciseActivity?.tvTitle?.visibility = View.INVISIBLE
+        /* Le timer pour l'excercice est affiché */
+        bindingExcerciseActivity?.flExcerciceView?.visibility = View.VISIBLE
+        /*Affichage du nom de l'exercice -  setVisible */
+        bindingExcerciseActivity?.tvExerciceName?.visibility = View.VISIBLE
+        /*Affichage de l'image de l'exercice*/
+        bindingExcerciseActivity?.ivImage?.visibility = View.VISIBLE
+        /* Cette fonction permet de s'assurer que le timer n'est pas deja en marche */
+        if (compteARebourExcercice != null)
+        {
+            compteARebourExcercice?.cancel()
+            timerProgressBarExcercice = 0
+        }
+        /*setup de l'image à la current exercice position laquelle est incrementée onFinish */
+        bindingExcerciseActivity?.ivImage?.setImageResource(exerciceList!![currentExercicePosition].getImage())
+        /**/
+        bindingExcerciseActivity?.tvExerciceName?.text = exerciceList!![currentExercicePosition].getName()
+        setupTimerViewExcercice()
     }
 
     /**
      * Methode gérant la durée de l'excercice
      */
-    private fun setRestTimerProgressBarExcercice()
+    private fun setupTimerViewExcercice()
     {
         bindingExcerciseActivity?.progressBar?.progress = restProgress
         /**
@@ -115,15 +143,24 @@ class ExerciseActivity : AppCompatActivity() {
                 /*
                 restProgress est utilisé pour le décompte
                  */
-                restTimerProgressBarExcercice++
+                timerProgressBarExcercice++
                 // Décompte pour la progressBar
-                bindingExcerciseActivity?.progressBarExcerciceTimer?.progress = 30 - restTimerProgressBarExcercice
+                bindingExcerciseActivity?.progressBarExcerciceTimer?.progress = 30 - timerProgressBarExcercice
                 //Decompte textuelle 10 . 9 . 8. 7 .6 ...
-                bindingExcerciseActivity?.tvTimerExcercice?.text = (30 - restTimerProgressBarExcercice).toString()
+                bindingExcerciseActivity?.tvTimerExcercice?.text = (30 - timerProgressBarExcercice).toString()
             }
 
             override fun onFinish() {
-                Toast.makeText(this@ExerciseActivity,"30 secondes are over", Toast.LENGTH_SHORT).show()
+                /* Si la fin de la liste des exercices n'est pas atteinte alors retour vers la page start */
+                if (currentExercicePosition < exerciceList?.size!! - 1)
+                {
+                setupMainView()
+                }else /* sinon un message de fécilitation*/
+                    {
+                        Toast.makeText(this@ExerciseActivity,"Bravo, vous avez terminé tous les exercices", Toast.LENGTH_SHORT).show()
+                    }
+
+
 
             }
 
@@ -131,7 +168,11 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
 
-
+    /* Destroying the timer when closing the activity or app */
+    // START
+    /**
+     * Here in the Destroy function we will reset the rest timer if it is running.
+     */
     override fun onDestroy() {
         super.onDestroy()
         if(compteARebour != null)
@@ -143,7 +184,7 @@ class ExerciseActivity : AppCompatActivity() {
         if(compteARebourExcercice != null)
         {
             compteARebourExcercice?.cancel()
-            restTimerProgressBarExcercice = 0
+            timerProgressBarExcercice = 0
         }
 
 
