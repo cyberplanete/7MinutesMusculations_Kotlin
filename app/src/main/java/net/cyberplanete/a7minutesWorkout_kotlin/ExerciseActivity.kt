@@ -88,13 +88,30 @@ class ExerciseActivity : AppCompatActivity() {
                 // Décompte pour la progressBar
                 bindingExcerciseActivity?.progressBar?.progress = 10 - restProgress
                 //Decompte textuelle 10 . 9 . 8. 7 .6 ...
-                bindingExcerciseActivity?.tvTimer?.text = (10 - restProgress).toString()
+                bindingExcerciseActivity?.tvTimerSecondNextExercice?.text = (10 - restProgress).toString()
+
+                if(currentExercicePosition + 1 <= exerciceList!!.size )
+                {
+                    bindingExcerciseActivity?.tvNextExerciceName?.text = exerciceList!![currentExercicePosition+1].getName()
+                    /*Le titre du prochain exercice est rendu visible */
+                    bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.VISIBLE
+                    bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.VISIBLE
+                }else
+                {
+                    bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.VISIBLE
+                    bindingExcerciseActivity?.tvTitleNextExerciceName?.text = "Exercices terminées"
+                }
+
+
             }
 
             override fun onFinish() {
                 Toast.makeText(this@ExerciseActivity,"Here we will start the excercice.", Toast.LENGTH_SHORT).show()
                 /* currentExercicePosition etant initialisé à -1. il passe à 0 */
                 currentExercicePosition++
+                /*Le titre du prochain exercice est rendu invisible */
+                bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.INVISIBLE
+                bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.INVISIBLE
                 /* Quand le timer de démmarage est terminé, je lance le timer pour l'excercice */
                 setupViewExercice()
             }
@@ -147,7 +164,7 @@ class ExerciseActivity : AppCompatActivity() {
                 // Décompte pour la progressBar
                 bindingExcerciseActivity?.progressBarExcerciceTimer?.progress = 30 - timerProgressBarExcercice
                 //Decompte textuelle 10 . 9 . 8. 7 .6 ...
-                bindingExcerciseActivity?.tvTimerExcercice?.text = (30 - timerProgressBarExcercice).toString()
+                bindingExcerciseActivity?.tvTimerSecondExcercice?.text = (30 - timerProgressBarExcercice).toString()
             }
 
             override fun onFinish() {

@@ -21,7 +21,7 @@ object Constants {
         exerciceList.add(abdominal_crunch_exercice)
         val knees_running_in_place_exercice = ExerciceModel(
             3,
-            "igh_knees_running_in_place_exercice",
+            "knees running_in_place",
             R.drawable.ic_high_knees_running_in_place,
             false,
             false
@@ -36,7 +36,7 @@ object Constants {
         exerciceList.add(lunge_exercice)
 
         val plank_exercice = ExerciceModel(
-            5, "plank_exercice", R.drawable.ic_plank, false, false
+            5, "plank exercice", R.drawable.ic_plank, false, false
 
         )
         exerciceList.add(plank_exercice)
