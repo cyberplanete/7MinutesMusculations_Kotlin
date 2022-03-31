@@ -3,13 +3,17 @@ package net.cyberplanete.a7minutesWorkout_kotlin
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceModel
+import java.util.*
+import kotlin.collections.ArrayList
 
-class ExerciseActivity : AppCompatActivity() {
+class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
 
     private var bindingExcerciseActivity : ActivityExerciseBinding? =  null
     private var compteARebour: CountDownTimer? = null
@@ -21,7 +25,13 @@ class ExerciseActivity : AppCompatActivity() {
     private var exerciceList: ArrayList<ExerciceModel>? = null
     private var currentExercicePosition = -1
 
+    private var tts: TextToSpeech? = null // Variable for TextToSpeech
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Initialize the Text To Speech
+        tts = TextToSpeech(this, this)
+
         super.onCreate(savedInstanceState)
         bindingExcerciseActivity = ActivityExerciseBinding.inflate(layoutInflater)
         setContentView(bindingExcerciseActivity?.root)
@@ -46,6 +56,29 @@ class ExerciseActivity : AppCompatActivity() {
         setupMainView()
 
 
+    }
+
+    /**
+     * This the TextToSpeech override function
+     *
+     * Called to signal the completion of the TextToSpeech engine initialization.
+     */
+    override fun onInit(status: Int) {
+
+        if (status == TextToSpeech.SUCCESS) {
+            // set FR Français as language for tts
+            val result = tts!!.setLanguage(Locale.FRANCE)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "The Language specified is not supported!")
+            }
+
+        } else {
+            Log.e("TTS", "Initialization Failed!")
+        }
+    }
+    private fun speakOut(text: String) {
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 
     /**
@@ -75,11 +108,27 @@ class ExerciseActivity : AppCompatActivity() {
     private fun setupTimerMainView()
     {
         bindingExcerciseActivity?.progressBar?.progress = restProgress
+
+        if(currentExercicePosition + 1 <= exerciceList!!.size )
+        {
+            var nextExerviceName =exerciceList!![currentExercicePosition+1].getName()
+            bindingExcerciseActivity?.tvNextExerciceName?.text = nextExerviceName
+            /*Le titre du prochain exercice est rendu visible */
+            bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.VISIBLE
+            bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.VISIBLE
+            speakOut(nextExerviceName)
+        }else
+        {
+            bindingExcerciseActivity?.tvNextExerciceName?.text = "Exercices terminées"
+            bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.VISIBLE
+        }
+
         /**
          * Création de mon objet restTimer = object : CountDownTimer
          */
         compteARebour = object : CountDownTimer(10000,1000)
         {
+            /* TIMER */
             override fun onTick(p0: Long) {
                 /*
                 restProgress est utilisé pour le décompte
@@ -89,19 +138,6 @@ class ExerciseActivity : AppCompatActivity() {
                 bindingExcerciseActivity?.progressBar?.progress = 10 - restProgress
                 //Decompte textuelle 10 . 9 . 8. 7 .6 ...
                 bindingExcerciseActivity?.tvTimerSecondNextExercice?.text = (10 - restProgress).toString()
-
-                if(currentExercicePosition + 1 <= exerciceList!!.size )
-                {
-                    bindingExcerciseActivity?.tvNextExerciceName?.text = exerciceList!![currentExercicePosition+1].getName()
-                    /*Le titre du prochain exercice est rendu visible */
-                    bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.VISIBLE
-                    bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.VISIBLE
-                }else
-                {
-                    bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.VISIBLE
-                    bindingExcerciseActivity?.tvTitleNextExerciceName?.text = "Exercices terminées"
-                }
-
 
             }
 
@@ -115,6 +151,7 @@ class ExerciseActivity : AppCompatActivity() {
                 /* Quand le timer de démmarage est terminé, je lance le timer pour l'excercice */
                 setupViewExercice()
             }
+
 
         }.start()
     }
@@ -204,8 +241,14 @@ class ExerciseActivity : AppCompatActivity() {
             timerProgressBarExcercice = 0
         }
 
-
+        if(tts != null)
+        {
+            tts!!.stop()
+            tts!!.shutdown()
+        }
         bindingExcerciseActivity = null
     }
+
+
 
 }
