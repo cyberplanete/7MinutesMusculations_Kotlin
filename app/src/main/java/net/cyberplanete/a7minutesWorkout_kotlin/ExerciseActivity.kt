@@ -1,5 +1,7 @@
 package net.cyberplanete.a7minutesWorkout_kotlin
 
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -10,6 +12,7 @@ import android.widget.Toast
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceModel
+import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,6 +29,7 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
     private var currentExercicePosition = -1
 
     private var tts: TextToSpeech? = null // Variable for TextToSpeech
+    private var mediaPlayer:MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -159,6 +163,21 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
      * Affichage des éléments pour la page exercice
      */
     private fun setupViewExercice() {
+        /* LECTURE D'UN SON LORS DU DEPART DE CHAQUE EXERCICE*/
+        try {
+            val soundURI = Uri.parse("android.resource://net.cyberplanete.a7minutesWorkout_kotlin/" + R.raw.press_start)
+            mediaPlayer = MediaPlayer.create(applicationContext, soundURI)
+            /* is looping = false afin de ne pas permettre une boucle infinie du fichier audio*/
+            mediaPlayer?.isLooping = false
+            /* Lecture du fichier son*/
+            mediaPlayer?.start()
+        }catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
+
+
+
         /* Le Timer précedent est invisible si view.gone la contrainte du text view est perdue app:layout_constraintBottom_toTopOf="@id/flProgressBarTimerForStart" et est mal positionnée */
         bindingExcerciseActivity?.flMainViewTimer?.visibility = View.INVISIBLE
         /* Le titre au dessus du timer est configuré invisible*/
@@ -245,6 +264,12 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
         {
             tts!!.stop()
             tts!!.shutdown()
+        }
+
+        if (mediaPlayer != null )
+        {
+            mediaPlayer!!.stop()
+
         }
         bindingExcerciseActivity = null
     }
