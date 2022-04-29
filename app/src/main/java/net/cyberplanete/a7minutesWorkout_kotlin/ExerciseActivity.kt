@@ -14,13 +14,12 @@ import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBind
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceModel
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceStatusAdaptateur
-import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
+class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
-    private var bindingExcerciseActivity : ActivityExerciseBinding? =  null
+    private var bindingExcerciseActivity: ActivityExerciseBinding? = null
     private var compteARebour: CountDownTimer? = null
     private var restProgress = 0
 
@@ -31,9 +30,11 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
     private var currentExercicePosition = -1
 
     private var tts: TextToSpeech? = null // Variable for TextToSpeech
-    private var mediaPlayer:MediaPlayer? = null
+    private var mediaPlayer: MediaPlayer? = null
 
-    private var exerciceStatusAdaptateur : ExerciceStatusAdaptateur? = null
+    private var exerciceStatusAdaptateur: ExerciceStatusAdaptateur? = null
+
+    private var exerciseTimerDuration: Long = 30
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -47,8 +48,7 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
 
         setSupportActionBar(bindingExcerciseActivity?.toolbarExcercise)
 
-        if (supportActionBar != null)
-        {/* Afficher la fleche pour permettre le retour*/
+        if (supportActionBar != null) {/* Afficher la fleche pour permettre le retour*/
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         /* Initialisation de l'exercice par defaut  */
@@ -61,20 +61,21 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
         /*
         Verification que le timer n'est pas déja en fonctionnement
          */
-        setupMainView()
+        setupRestView()
 
         setupExerciceStatusRecyclerView()
 
     }
+
     /**
      * Function is used to set up the recycler view to UI.
      * Binding adapter class to recycler view and setting the recycler view layout manager and passing a list to the adapter
      */
-    private fun setupExerciceStatusRecyclerView ()
-    {
+    private fun setupExerciceStatusRecyclerView() {
         /* Defining a layout manager for the recycle view */
         /* Here we have used a LinearLayout Manager with horizontal scroll. */
-        bindingExcerciseActivity?.rvExerciceStatus?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        bindingExcerciseActivity?.rvExerciceStatus?.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         /* As the adapter expects the exercises list and context so initialize it passing it. */
         exerciceStatusAdaptateur = ExerciceStatusAdaptateur(exerciceList!!)
         /* Adapter class is attached to recycler view */
@@ -101,57 +102,68 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
             Log.e("TTS", "Initialization Failed!")
         }
     }
+
     private fun speakOut(text: String) {
         tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 
+    //Setting up the Get Ready View with 10 seconds of timer
+    //START
     /**
-     * Cette fonction permet de s'assurer que le timer n'est pas deja en marche ex: Après un click sur retour puis à nouveau start
-     * Si oui, il est reintialisé
+     * Function is used to set the timer for REST.
      */
-    private fun setupMainView() {
+    private fun setupRestView() {
+
+        /* LECTURE D'UNE MUSIQUE LORS DU DEPART DE CHAQUE EXERCICE*/
+        try {
+            val soundURI =
+                Uri.parse("android.resource://net.cyberplanete.a7minutesWorkout_kotlin/" + R.raw.press_start)
+            mediaPlayer = MediaPlayer.create(applicationContext, soundURI)
+            /* is looping = false afin de ne pas permettre une boucle infinie du fichier audio*/
+            mediaPlayer?.isLooping = false
+            /* Lecture du fichier son*/
+            mediaPlayer?.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+
         /* Le Timer précedent est invisible si view.gone la contrainte du text view est perdue app:layout_constraintBottom_toTopOf="@id/flProgressBarTimerForStart" et est mal positionnée */
         bindingExcerciseActivity?.flMainViewTimer?.visibility = View.VISIBLE
         /* Le titre au dessus du timer est configuré invisible*/
         bindingExcerciseActivity?.tvTitle?.visibility = View.VISIBLE
+        /* Affichage du prochain exercice */
+        bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.VISIBLE
         /* Le timer pour l'excercice est affiché */
         bindingExcerciseActivity?.flExcerciceView?.visibility = View.INVISIBLE
         /*Affichage du nom de l'exercice -  setVisible */
         bindingExcerciseActivity?.tvExerciceName?.visibility = View.INVISIBLE
         /*Affichage de l'image de l'exercice*/
         bindingExcerciseActivity?.ivImage?.visibility = View.INVISIBLE
-        if (compteARebour != null)
-        {
+        if (compteARebour != null) {
             compteARebour?.cancel()
             restProgress = 0
         }
-        setupTimerMainView()
+        // Setting the upcoming exercise name in the UI element
+        // START
+        // Here we have set the upcoming exercise name to the text view
+        // Here as the current position is -1 by default so to selected from the list it should be 0 so we have increased it by +1.
+        bindingExcerciseActivity?.tvTitleNextExerciceName?.text =
+            exerciceList!![currentExercicePosition + 1].getName()
+        // This function is used to set the progress details.
+        setupTimerRestView()
     }
+    //END
 
+    private fun setupTimerRestView() {
 
-    private fun setupTimerMainView()
-    {
-        bindingExcerciseActivity?.progressBar?.progress = restProgress
-
-        if(currentExercicePosition + 1 <= exerciceList!!.size )
-        {
-            var nextExerviceName =exerciceList!![currentExercicePosition+1].getName()
-            bindingExcerciseActivity?.tvNextExerciceName?.text = nextExerviceName
-            /*Le titre du prochain exercice est rendu visible */
-            bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.VISIBLE
-            bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.VISIBLE
-            speakOut(nextExerviceName)
-        }else
-        {
-            bindingExcerciseActivity?.tvNextExerciceName?.text = "Exercices terminées"
-            bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.VISIBLE
-        }
+        bindingExcerciseActivity?.progressBar?.progress =
+            restProgress // Sets the current progress to the specified value.
 
         /**
          * Création de mon objet restTimer = object : CountDownTimer
          */
-        compteARebour = object : CountDownTimer(10000,1000)
-        {
+        compteARebour = object : CountDownTimer(10000, 1000) {
             /* TIMER */
             override fun onTick(p0: Long) {
                 /*
@@ -161,42 +173,42 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
                 // Décompte pour la progressBar
                 bindingExcerciseActivity?.progressBar?.progress = 10 - restProgress
                 //Decompte textuelle 10 . 9 . 8. 7 .6 ...
-                bindingExcerciseActivity?.tvTimerSecondNextExercice?.text = (10 - restProgress).toString()
+                bindingExcerciseActivity?.tvTimerSecondNextExercice?.text =
+                    (10 - restProgress).toString()
 
             }
 
             override fun onFinish() {
-                Toast.makeText(this@ExerciseActivity,"Here we will start the excercice.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@ExerciseActivity,
+                    "Here we will start the excercice.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 /* currentExercicePosition etant initialisé à -1. il passe à 0 */
                 currentExercicePosition++
                 /*Le titre du prochain exercice est rendu invisible */
                 bindingExcerciseActivity?.tvNextExerciceName?.visibility = View.INVISIBLE
                 bindingExcerciseActivity?.tvTitleNextExerciceName?.visibility = View.INVISIBLE
+
+                /* Represente une partie de la logique permettant d'afficher le petit cercle d'une couleur differente de l'exercice en cours dans la vue de l'exercice setExerciceView() */
+                exerciceList!![currentExercicePosition].setIsSelected(true)
+                exerciceStatusAdaptateur!!.notifyDataSetChanged() // Notification permettant de relancer les methodes de l'adaptateur -- Si  cette ligne est absente!! La couleur de l'exercice en cours ne fonctionne pas  !!
+
                 /* Quand le timer de démmarage est terminé, je lance le timer pour l'excercice */
-                setupViewExercice()
+                setExerciceView()
             }
 
 
         }.start()
     }
+
+
+    // Setting up the Exercise View with a 30 seconds timer
+    // START
     /**
-     * Affichage des éléments pour la page exercice
+     * Function is used to set the progress of the timer using the progress for Exercise View.
      */
-    private fun setupViewExercice() {
-        /* LECTURE D'UN SON LORS DU DEPART DE CHAQUE EXERCICE*/
-        try {
-            val soundURI = Uri.parse("android.resource://net.cyberplanete.a7minutesWorkout_kotlin/" + R.raw.press_start)
-            mediaPlayer = MediaPlayer.create(applicationContext, soundURI)
-            /* is looping = false afin de ne pas permettre une boucle infinie du fichier audio*/
-            mediaPlayer?.isLooping = false
-            /* Lecture du fichier son*/
-            mediaPlayer?.start()
-        }catch (e: Exception)
-        {
-            e.printStackTrace()
-        }
-
-
+    private fun setExerciceView() {
 
         /* Le Timer précedent est invisible si view.gone la contrainte du text view est perdue app:layout_constraintBottom_toTopOf="@id/flProgressBarTimerForStart" et est mal positionnée */
         bindingExcerciseActivity?.flMainViewTimer?.visibility = View.INVISIBLE
@@ -209,51 +221,70 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
         /*Affichage de l'image de l'exercice*/
         bindingExcerciseActivity?.ivImage?.visibility = View.VISIBLE
         /* Cette fonction permet de s'assurer que le timer n'est pas deja en marche */
-        if (compteARebourExcercice != null)
-        {
+
+
+        /**
+         * Here firstly we will check if the timer is running and it is not null then cancel the running timer and start the new one.
+         * And set the progress to the initial value which is 0.
+         */
+        if (compteARebourExcercice != null) {
             compteARebourExcercice?.cancel()
             timerProgressBarExcercice = 0
         }
+        var nextExerviceName = exerciceList!![currentExercicePosition].getName()
+        speakOut(nextExerviceName)
         /*setup de l'image à la current exercice position laquelle est incrementée onFinish */
         bindingExcerciseActivity?.ivImage?.setImageResource(exerciceList!![currentExercicePosition].getImage())
         /**/
-        bindingExcerciseActivity?.tvExerciceName?.text = exerciceList!![currentExercicePosition].getName()
-        setupTimerViewExcercice()
+        bindingExcerciseActivity?.tvExerciceName?.text =
+            exerciceList!![currentExercicePosition].getName()
+        setTimerExcerciceView()
     }
+    // END
 
+
+    // After REST View Setting up the 30 seconds timer for the Exercise view and updating it continuously
+    // START
     /**
-     * Methode gérant la durée de l'excercice
+     * Function is used to set the progress of the timer using the progress for Exercise View for 30 Seconds
      */
-    private fun setupTimerViewExcercice()
-    {
+    private fun setTimerExcerciceView() {
         bindingExcerciseActivity?.progressBar?.progress = restProgress
         /**
          * Création de mon objet restTimer = object : CountDownTimer
          */
-        compteARebourExcercice = object : CountDownTimer(30000,1000)
-        {
+        compteARebourExcercice = object : CountDownTimer(30000, 1000) {
             override fun onTick(p0: Long) {
                 /*
                 restProgress est utilisé pour le décompte
                  */
                 timerProgressBarExcercice++
                 // Décompte pour la progressBar
-                bindingExcerciseActivity?.progressBarExcerciceTimer?.progress = 30 - timerProgressBarExcercice
+                bindingExcerciseActivity?.progressBarExcerciceTimer?.progress =
+                    exerciseTimerDuration.toInt() - timerProgressBarExcercice
                 //Decompte textuelle 10 . 9 . 8. 7 .6 ...
-                bindingExcerciseActivity?.tvTimerSecondExcercice?.text = (30 - timerProgressBarExcercice).toString()
+                bindingExcerciseActivity?.tvTimerSecondExcercice?.text =
+                    (exerciseTimerDuration.toInt() - timerProgressBarExcercice).toString()
             }
 
             override fun onFinish() {
-                /* Si la fin de la liste des exercices n'est pas atteinte alors retour vers la page start */
-                if (currentExercicePosition < exerciceList?.size!! - 1)
-                {
-                setupMainView()
-                }else /* sinon un message de fécilitation*/
-                    {
-                        Toast.makeText(this@ExerciseActivity,"Bravo, vous avez terminé tous les exercices", Toast.LENGTH_SHORT).show()
-                    }
 
+                /* Represente une partie de la logique permettant d'afficher le petit cercle d'une couleur differente de l'exercice en cours dans la vue de l'exercice  */
+                exerciceList!![currentExercicePosition].setIsSelected(false)
+                exerciceList!![currentExercicePosition].setIsCompleted(true) // Modification de la couleur du cercle pour afficher la progression quand un exercice est terminée
+                exerciceStatusAdaptateur!!.notifyDataSetChanged() // Notification permettant de relancer les methodes de l'adaptateur -- Si  cette ligne est absente!! La couleur de l'exercice en cours ne fonctionne pas  !!
 
+                // Updating the view after completing the 30 seconds exercise
+                // START
+                if (currentExercicePosition < exerciceList?.size!! - 1) {
+                    setupRestView()
+                } else /* sinon un message de fécilitation*/ {
+                    Toast.makeText(
+                        this@ExerciseActivity,
+                        "Bravo, vous avez terminé tous les exercices",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
             }
 
@@ -268,32 +299,27 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
      */
     override fun onDestroy() {
         super.onDestroy()
-        if(compteARebour != null)
-        {
+        if (compteARebour != null) {
             compteARebour?.cancel()
             restProgress = 0
         }
 
-        if(compteARebourExcercice != null)
-        {
+        if (compteARebourExcercice != null) {
             compteARebourExcercice?.cancel()
             timerProgressBarExcercice = 0
         }
 
-        if(tts != null)
-        {
+        if (tts != null) {
             tts!!.stop()
             tts!!.shutdown()
         }
 
-        if (mediaPlayer != null )
-        {
+        if (mediaPlayer != null) {
             mediaPlayer!!.stop()
 
         }
         bindingExcerciseActivity = null
     }
-
 
 
 }
