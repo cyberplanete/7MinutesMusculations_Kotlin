@@ -21,7 +21,7 @@ class ExerciceStatusAdaptateur(val items: ArrayList<ExerciceModel>) :
 /* Pour chaque item */
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val model: ExerciceModel = items[position]
-    /* Id de l'excercice assign to holder étant item_exercice_status.xml */
+    /* Id de l'excercice assigned to holder item_exercice_status.xml */
         viewHolder.tvItem.text = model.getId().toString()
     }
 

@@ -9,9 +9,11 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceModel
+import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceStatusAdaptateur
 import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -30,6 +32,8 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
 
     private var tts: TextToSpeech? = null // Variable for TextToSpeech
     private var mediaPlayer:MediaPlayer? = null
+
+    private var exerciceStatusAdaptateur : ExerciceStatusAdaptateur? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -59,8 +63,24 @@ class ExerciseActivity : AppCompatActivity() ,  TextToSpeech.OnInitListener  {
          */
         setupMainView()
 
+        setupExerciceStatusRecyclerView()
 
     }
+    /**
+     * Function is used to set up the recycler view to UI.
+     * Binding adapter class to recycler view and setting the recycler view layout manager and passing a list to the adapter
+     */
+    private fun setupExerciceStatusRecyclerView ()
+    {
+        /* Defining a layout manager for the recycle view */
+        /* Here we have used a LinearLayout Manager with horizontal scroll. */
+        bindingExcerciseActivity?.rvExerciceStatus?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        /* As the adapter expects the exercises list and context so initialize it passing it. */
+        exerciceStatusAdaptateur = ExerciceStatusAdaptateur(exerciceList!!)
+        /* Adapter class is attached to recycler view */
+        bindingExcerciseActivity?.rvExerciceStatus?.adapter = exerciceStatusAdaptateur
+    }
+
 
     /**
      * This the TextToSpeech override function
