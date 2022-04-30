@@ -1,5 +1,6 @@
 package net.cyberplanete.a7minutesWorkout_kotlin
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -34,8 +35,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var exerciceStatusAdaptateur: ExerciceStatusAdaptateur? = null
 
-    private var exerciseTimerDuration: Long = 30
-
+    private var exerciseTimerDuration: Long = 1
+    private var restTimerDuration: Long = 1
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initialize the Text To Speech
@@ -163,7 +164,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         /**
          * Création de mon objet restTimer = object : CountDownTimer
          */
-        compteARebour = object : CountDownTimer(10000, 1000) {
+        compteARebour = object : CountDownTimer( restTimerDuration * 1000, 1000) {
             /* TIMER */
             override fun onTick(p0: Long) {
                 /*
@@ -253,7 +254,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         /**
          * Création de mon objet restTimer = object : CountDownTimer
          */
-        compteARebourExcercice = object : CountDownTimer(30000, 1000) {
+        compteARebourExcercice = object : CountDownTimer(exerciseTimerDuration * 1000, 1000) {
             override fun onTick(p0: Long) {
                 /*
                 restProgress est utilisé pour le décompte
@@ -269,20 +270,28 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
 
-                /* Represente une partie de la logique permettant d'afficher le petit cercle d'une couleur differente de l'exercice en cours dans la vue de l'exercice  */
-                exerciceList!![currentExercicePosition].setIsSelected(false)
-                exerciceList!![currentExercicePosition].setIsCompleted(true) // Modification de la couleur du cercle pour afficher la progression quand un exercice est terminée
-                exerciceStatusAdaptateur!!.notifyDataSetChanged() // Notification permettant de relancer les methodes de l'adaptateur -- Si  cette ligne est absente!! La couleur de l'exercice en cours ne fonctionne pas  !!
 
                 // Updating the view after completing the 30 seconds exercise
                 // START
+                // Si la fin de la liste des exercices n'est pas atteinte
                 if (currentExercicePosition < exerciceList?.size!! - 1) {
+                    /* Logique permettant d'afficher la progression dans une liste d'excercice représentée par des cercles de couleur */
+                    exerciceList!![currentExercicePosition].setIsSelected(false) // Pas Modification de la couleur du cercle pour afficher la progression quand un exercice est en cours
+                    exerciceList!![currentExercicePosition].setIsCompleted(true) // Modification de la couleur du cercle pour afficher la progression quand un exercice est terminée
+                    exerciceStatusAdaptateur!!.notifyDataSetChanged() // Notification permettant de relancer les methodes de l'adaptateur -- Si  cette ligne est absente!! Il n'y a pas de modification des couleurs des cercles de l'exercice !!
+                    /* Retour vers une configuration de la page timer repos 10 secondes  */
                     setupRestView()
                 } else /* sinon un message de fécilitation*/ {
+                    /* Fermeture de la page exercice*/
+                    finish()
+                    /* La page FinishActivity est affichée*/
+                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java) // intent est dans l'object "compteARebourExcercice = object". Il est par conséquent obligatoire d'être plus précis en ajoutant:  this@ExerciseActivity
+                    startActivity(intent)
                     Toast.makeText(
                         this@ExerciseActivity,
                         "Bravo, vous avez terminé tous les exercices",
                         Toast.LENGTH_SHORT
+
                     ).show()
                 }
 

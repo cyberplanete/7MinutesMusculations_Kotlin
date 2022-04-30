@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="@drawable/objet_background_color_effet_ripple">
+        android:background="@drawable/objet_circulaire_background_color_effet_ripple">
 
     <TextView
         android:layout_width="match_parent"
@@ -36,5 +36,6 @@
         />
 
     </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

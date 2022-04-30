@@ -9,10 +9,16 @@
         <entry key="app/src/main/res/drawable/item_circular_color_accent_background.xml" value="0.3105" />
         <entry key="app/src/main/res/drawable/item_circular_color_gray_background.xml" value="0.1785" />
         <entry key="app/src/main/res/drawable/item_circular_color_green_background.xml" value="0.3105" />
+        <entry key="app/src/main/res/drawable/item_circular_color_thin_color_accent_border.xml" value="0.311" />
+        <entry key="app/src/main/res/drawable/objet_background_color_effet_ripple.xml" value="0.311" />
         <entry key="app/src/main/res/drawable/objet_background_couleur_effet_ripple.xml" value="0.2285" />
         <entry key="app/src/main/res/drawable/objet_circulaire_accent_bordure.xml" value="0.2285" />
+        <entry key="app/src/main/res/drawable/objet_circulaire_background_color_effet_ripple.xml" value="0.311" />
+        <entry key="app/src/main/res/drawable/objet_circulaire_color_accent_bordure.xml" value="0.311" />
         <entry key="app/src/main/res/layout-v26/activity_exercise.xml" value="0.38179347826086957" />
+        <entry key="app/src/main/res/layout/activity_end_exercices.xml" value="0.30842391304347827" />
         <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_finish.xml" value="0.54375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.359375" />
         <entry key="app/src/main/res/layout/item_exercice_status.xml" value="0.30842391304347827" />
       </map>
