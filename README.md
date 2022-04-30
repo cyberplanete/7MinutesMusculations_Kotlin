@@ -9,8 +9,8 @@ Application simple affichant des exercices d'entrainement physique à réaliser 
 
 ### Android:
 
-![screenshot1](screenshots/screenshot1.jpg)
-![screenshot2](screenshots/screenshot2.jpg)
+![screenshot1](screenshots/screenshot1.png)
+![screenshot2](screenshots/screenshot2.png)
 
 
 
