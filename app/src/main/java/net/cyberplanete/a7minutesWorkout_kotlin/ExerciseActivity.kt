@@ -35,8 +35,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var exerciceStatusAdaptateur: ExerciceStatusAdaptateur? = null
 
-    private var exerciseTimerDuration: Long = 1
-    private var restTimerDuration: Long = 1
+    private var exerciseTimerDuration: Long = 30
+    private var restTimerDuration: Long = 10
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initialize the Text To Speech
