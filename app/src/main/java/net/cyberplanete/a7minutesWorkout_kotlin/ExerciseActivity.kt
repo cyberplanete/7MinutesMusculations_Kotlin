@@ -308,8 +308,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         }.start()
     }
-    // ********************************************* Gestion des boutons retour android *************************************
-    /* Gestion du bouton retour du menu android */
+    /**
+     ********************************************* Gestion des boutons retour android *************************************
+    *                                           Gestion du bouton retour du menu android
+    **/
     override fun onBackPressed() {
         customDialogForBackButton()
         //super.onBackPressed()
@@ -337,7 +339,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
         customDialog.show()
     }
-    // ********************************************* END -- Gestion des boutons retour *************************************
+    /**
+    ********************************************* END -- Gestion des boutons retour *************************************
+    **/
 
     /* Destroying the timer when closing the activity or app */
     // START
