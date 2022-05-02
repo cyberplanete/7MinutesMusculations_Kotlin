@@ -1,5 +1,6 @@
 package net.cyberplanete.a7minutesWorkout_kotlin
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBinding
+import net.cyberplanete.a7minutesWorkout_kotlin.databinding.DialogCustomBackConfirmationBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceModel
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceStatusAdaptateur
@@ -55,9 +57,12 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         /* Initialisation de l'exercice par defaut  */
         exerciceList = Constants.defaultExerciceList()
 
+        /* Bouton retour   <-  vers le début de l'exercice  */
         bindingExcerciseActivity?.toolbarExcercise?.setNavigationOnClickListener()
         {
-            onBackPressed()
+            //onBackPressed()
+            customDialogForBackButton()
+
         }
         /*
         Verification que le timer n'est pas déja en fonctionnement
@@ -67,6 +72,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         setupExerciceStatusRecyclerView()
 
     }
+
 
     /**
      * Function is used to set up the recycler view to UI.
@@ -164,7 +170,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         /**
          * Création de mon objet restTimer = object : CountDownTimer
          */
-        compteARebour = object : CountDownTimer( restTimerDuration * 1000, 1000) {
+        compteARebour = object : CountDownTimer(restTimerDuration * 1000, 1000) {
             /* TIMER */
             override fun onTick(p0: Long) {
                 /*
@@ -285,7 +291,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     /* Fermeture de la page exercice*/
                     finish()
                     /* La page FinishActivity est affichée*/
-                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java) // intent est dans l'object "compteARebourExcercice = object". Il est par conséquent obligatoire d'être plus précis en ajoutant:  this@ExerciseActivity
+                    val intent = Intent(
+                        this@ExerciseActivity,
+                        FinishActivity::class.java
+                    ) // intent est dans l'object "compteARebourExcercice = object". Il est par conséquent obligatoire d'être plus précis en ajoutant:  this@ExerciseActivity
                     startActivity(intent)
                     Toast.makeText(
                         this@ExerciseActivity,
@@ -299,7 +308,36 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         }.start()
     }
+    // ********************************************* Gestion des boutons retour android *************************************
+    /* Gestion du bouton retour du menu android */
+    override fun onBackPressed() {
+        customDialogForBackButton()
+        //super.onBackPressed()
+    }
 
+    /* Gestion da la fleche retour du haut par un Custom Dialog which is used to ask user if he is sure to go back to the start */
+    private fun customDialogForBackButton() {
+        /* Je cree un dialog */
+        val customDialog = Dialog(this)
+        /* Binding sur le fichier xml dialog_custom_back_confirmation pour pouvoir écouter si il y a pression sur le bouton oui ou non*/
+        val dialogBinding = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
+        /* Affichage de la page */
+        customDialog.setContentView(dialogBinding.root)
+        /* Ne pas permettre l'annulation lorsque que l'utilisateur click en dehors du dialog de confirmation */
+        customDialog.setCanceledOnTouchOutside(false)
+        /* Bouton oui*/
+        dialogBinding.btnYes.setOnClickListener {
+            this@ExerciseActivity.finish() //Si oui - Fermeture de l'activité Exercice
+            customDialog.dismiss()// Fermeture du customDialog
+        }
+        /* Bouton non */
+        dialogBinding.btnNo.setOnClickListener {
+            customDialog.dismiss()//Fermeture du customDialog
+
+        }
+        customDialog.show()
+    }
+    // ********************************************* END -- Gestion des boutons retour *************************************
 
     /* Destroying the timer when closing the activity or app */
     // START
