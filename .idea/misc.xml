@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/circular_progress_bar.xml" value="0.2365" />
         <entry key="app/src/main/res/drawable/circular_progress_bar_accent_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/circular_progress_bar_grey.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/drawable_radio_group_tab_background.xml" value="0.1595" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.157" />
         <entry key="app/src/main/res/drawable/item_circular_color_accent_background.xml" value="0.3105" />
         <entry key="app/src/main/res/drawable/item_circular_color_gray_background.xml" value="0.1785" />
@@ -18,6 +19,8 @@
         <entry key="app/src/main/res/drawable/objet_circulaire_background_color_effet_ripple.xml" value="0.311" />
         <entry key="app/src/main/res/drawable/objet_circulaire_color_accent_bordure.xml" value="0.311" />
         <entry key="app/src/main/res/drawable/objet_rectangulaire_color_accent_bordure.xml" value="0.29" />
+        <entry key="app/src/main/res/drawable/objet_rectangulaire_tab_selector.xml" value="0.1595" />
+        <entry key="app/src/main/res/drawable/objet_rectangulaire_tab_text_color_selector.xml" value="0.1595" />
         <entry key="app/src/main/res/layout-v26/activity_exercise.xml" value="0.38179347826086957" />
         <entry key="app/src/main/res/layout/activity_end_exercices.xml" value="0.30842391304347827" />
         <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.5" />
