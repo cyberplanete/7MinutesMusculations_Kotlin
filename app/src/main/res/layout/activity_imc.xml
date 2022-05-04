@@ -19,8 +19,8 @@
         android:layout_below="@id/toolbar_imc_activity"
         android:layout_margin="10dp"
         android:background="@drawable/drawable_radio_group_tab_background"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <RadioButton
             android:id="@+id/rbMetricsUnits"
             android:layout_width="0dp"
@@ -35,9 +35,9 @@
             android:textSize="16dp"
             android:textStyle="bold" />
 
-<!--   android:layout_weight="0.5" c'est ce qui permet un partage       -->
+        <!--   android:layout_weight="0.5" c'est ce qui permet un partage       -->
         <RadioButton
-            android:id="@+id/rbUSUnits"
+            android:id="@+id/rbUSMetricUnits"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_weight="0.5"
@@ -51,7 +51,80 @@
             android:textStyle="bold" />
 
     </RadioGroup>
+    <!-- Pour les champs US units  -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilUSMetricWeight"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rgUnits"
+        android:layout_margin="10dp"
+        app:boxStrokeColor="@color/colorAccent"
+        app:hintTextColor="@color/colorAccent">
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etUSMetricWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Weight (in kg)"
+            android:inputType="numberDecimal"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tilUSMetricWeight"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUSMetricHeightFeet"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.5"
+            app:boxStrokeColor="@color/colorAccent"
+            app:hintTextColor="@color/colorAccent">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etUSUnitHeightFeet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Feet"
+                android:inputType="numberDecimal"
+                android:textSize="16sp" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUSMetricHeightInch"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.5"
+            app:boxStrokeColor="@color/colorAccent"
+            app:hintTextColor="@color/colorAccent">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etUSMetricHeightInch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Inch"
+                android:inputType="numberDecimal"
+                android:textSize="16sp" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <!-- END -   Pour les champs US units  -->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilMetricUnitWeight"

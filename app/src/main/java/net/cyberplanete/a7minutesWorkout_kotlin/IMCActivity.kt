@@ -1,18 +1,27 @@
 package net.cyberplanete.a7minutesWorkout_kotlin
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityImcBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.models.IMC
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.IMCBrain
 import kotlin.math.roundToInt
 
+
 class IMCActivity : AppCompatActivity() {
 
-    private var bindingIMC: ActivityImcBinding? = null
+    companion object
+    {
+        private const val METRIC_UNITS_VIEW = "METRIC_UNIT_VIEW"
+        private const val US_UNITS_VIEW = "US_UNIT_VIEW"
+    }
 
+    private var currentVisibleView: String = METRIC_UNITS_VIEW //A variable to hold a value to make a selected view visible
+
+    private var bindingIMC: ActivityImcBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +41,28 @@ class IMCActivity : AppCompatActivity() {
         {
             onBackPressed()
         }
+        /**
+         * Par defaut la page configuration de la page Metric FR pour le calcul de l'IMC
+         */
+        makeVisibleMetricUnitsView()
+
+        /**
+         * Méthode utiliser pour configurer la page usMetric ou metricFr on fonction du choix sur le bouton radio
+         */
+        bindingIMC?.rgUnits?.setOnCheckedChangeListener { _, id ->
+            if (id == bindingIMC?.rbMetricsUnits?.id)
+            {
+                makeVisibleMetricUnitsView() // Configuration pour la page metric FR
+            } else
+            {
+                makeVisibleUSMetricUnitsView() // Configuration pour la page metric US
+            }
+
+        }
 
 
         /**
-         * OnClickListenner pour le bouton calculIMC
+         * OnClickListenner SUR le bouton calculIMC
          */
         bindingIMC?.btnCalculateIMC?.setOnClickListener ()
         {
@@ -59,6 +86,46 @@ class IMCActivity : AppCompatActivity() {
         }
 
     }
+
+    /**
+     * Méthode utilisée pour la configuration de la page Metrique FR
+     */
+    private fun makeVisibleMetricUnitsView()
+    {
+        currentVisibleView = METRIC_UNITS_VIEW
+        bindingIMC?.tilMetricUnitHeight?.visibility = View.VISIBLE
+        bindingIMC?.tilMetricUnitWeight?.visibility = View.VISIBLE
+        bindingIMC?.tilUSMetricHeightFeet?.visibility = View.GONE
+        bindingIMC?.tilUSMetricWeight?.visibility = View.GONE
+        bindingIMC?.tilUSMetricHeightInch?.visibility = View.GONE
+
+        bindingIMC?.etMetricUnitHeight?.text!!.clear() //Height is cleared
+        bindingIMC?.etMetricUnitWeight?.text!!.clear() //Weight is cleared
+        bindingIMC?.llDisplayIMCResult?.visibility = View.INVISIBLE //Resultat est invisible par défaut à chague changement de page
+
+    }
+
+    /**
+     * Méthode utilisée pour la configuration de la page Metrique US
+     */
+    private fun makeVisibleUSMetricUnitsView()
+    {
+        currentVisibleView = US_UNITS_VIEW
+        bindingIMC?.tilMetricUnitHeight?.visibility = View.GONE
+        bindingIMC?.tilMetricUnitWeight?.visibility = View.GONE
+        bindingIMC?.tilUSMetricHeightFeet?.visibility = View.VISIBLE
+        bindingIMC?.tilUSMetricWeight?.visibility = View.VISIBLE
+        bindingIMC?.tilUSMetricHeightInch?.visibility = View.VISIBLE
+
+        bindingIMC?.etUSMetricWeight?.text!!.clear() //Height is cleared
+        bindingIMC?.etUSUnitHeightFeet?.text!!.clear() //Weight is cleared
+        bindingIMC?.etUSMetricHeightInch?.text!!.clear() //Weight is cleared
+        bindingIMC?.llDisplayIMCResult?.visibility = View.INVISIBLE //Resultat est invisible par défaut à chague changement de page
+
+    }
+
+
+
 
     /**
      * Cette méthode vérifie si les données obligatoires pour le calcul IMC sont bien présentent
