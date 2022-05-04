@@ -4,14 +4,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".IMCActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_imc_activity"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilMetricUnitWeight"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/toolbar_imc_activity"
+        app:boxStrokeColor="@color/colorAccent"
+        app:hintTextColor="@color/colorAccent">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etMetricUnitWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Poids en kg"
+            android:inputType="numberDecimal"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilMetricUnitHeight"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tilMetricUnitWeight"
+        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        app:boxStrokeColor="@color/colorAccent"
+        app:hintTextColor="@color/colorAccent">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etMetricUnitHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Taille en cm"
+            android:inputType="numberDecimal"
+            android:textSize="16sp" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llDisplayIMCResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tilMetricUnitHeight"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvVotreIMC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Votre IMC"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvIMCValeur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Valeur IMC"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvIMCInterpretation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Type IMC"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvIMCRecommandation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Description IMC"
+            android:textAllCaps="true"
+            android:textSize="18sp" />
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnCalculateIMC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llDisplayIMCResult"
+        android:layout_margin="10dp"
+        android:layout_marginTop="35dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Calculer"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
 </RelativeLayout>

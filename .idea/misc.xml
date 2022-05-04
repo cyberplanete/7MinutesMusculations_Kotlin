@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/drawable/objet_circulaire_background_bmi.xml" value="0.1465" />
         <entry key="app/src/main/res/drawable/objet_circulaire_background_color_effet_ripple.xml" value="0.311" />
         <entry key="app/src/main/res/drawable/objet_circulaire_color_accent_bordure.xml" value="0.311" />
+        <entry key="app/src/main/res/drawable/objet_rectangulaire_color_accent_bordure.xml" value="0.29" />
         <entry key="app/src/main/res/layout-v26/activity_exercise.xml" value="0.38179347826086957" />
         <entry key="app/src/main/res/layout/activity_end_exercices.xml" value="0.30842391304347827" />
         <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.5" />
