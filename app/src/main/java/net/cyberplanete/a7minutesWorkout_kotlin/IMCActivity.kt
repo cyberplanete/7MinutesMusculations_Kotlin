@@ -49,7 +49,7 @@ class IMCActivity : AppCompatActivity() {
         /**
          * Méthode utiliser pour configurer la page usMetric ou metricFr on fonction du choix sur le bouton radio
          */
-        bindingIMC?.rgUnits?.setOnCheckedChangeListener { _, id ->
+        bindingIMC?.rgUnits?.setOnCheckedChangeListener { _, id : Int ->
             if (id == bindingIMC?.rbMetricsUnits?.id)
             {
                 makeVisibleMetricUnitsView() // Configuration pour la page metric FR
@@ -111,8 +111,8 @@ class IMCActivity : AppCompatActivity() {
     private fun makeVisibleUSMetricUnitsView()
     {
         currentVisibleView = US_UNITS_VIEW
-        bindingIMC?.tilMetricUnitHeight?.visibility = View.GONE
-        bindingIMC?.tilMetricUnitWeight?.visibility = View.GONE
+        bindingIMC?.tilMetricUnitHeight?.visibility = View.INVISIBLE // Invisible plutot que gone pour garder le bon positionnement des éléments
+        bindingIMC?.tilMetricUnitWeight?.visibility = View.INVISIBLE // Invisible plutot que gone pour garder le bon positionnement
         bindingIMC?.tilUSMetricHeightFeet?.visibility = View.VISIBLE
         bindingIMC?.tilUSMetricWeight?.visibility = View.VISIBLE
         bindingIMC?.tilUSMetricHeightInch?.visibility = View.VISIBLE
@@ -123,8 +123,6 @@ class IMCActivity : AppCompatActivity() {
         bindingIMC?.llDisplayIMCResult?.visibility = View.INVISIBLE //Resultat est invisible par défaut à chague changement de page
 
     }
-
-
 
 
     /**

@@ -116,6 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Inch"
+
                 android:inputType="numberDecimal"
                 android:textSize="16sp" />
 
@@ -174,7 +175,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tilMetricUnitHeight"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:visibility="invisible"
         tools:visibility="visible">
@@ -222,13 +223,17 @@
 
     </LinearLayout>
 
+
+
     <Button
         android:id="@+id/btnCalculateIMC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/llDisplayIMCResult"
-        android:layout_margin="10dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Calculer"
         android:textAlignment="center"
