@@ -1,4 +1,4 @@
-package net.cyberplanete.a7minutesWorkout_kotlin.useful
+package net.cyberplanete.a7minutesWorkout_kotlin.models
 
 class ExerciceModel(
     private var id: Int,

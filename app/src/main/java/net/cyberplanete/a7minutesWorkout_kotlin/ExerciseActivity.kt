@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.DialogCustomBackConfirmationBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
-import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceModel
+import net.cyberplanete.a7minutesWorkout_kotlin.models.ExerciceModel
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceStatusAdaptateur
 import java.util.*
 import kotlin.collections.ArrayList

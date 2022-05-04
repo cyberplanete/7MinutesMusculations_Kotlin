@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import net.cyberplanete.a7minutesWorkout_kotlin.R
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ItemExerciceStatusBinding
+import net.cyberplanete.a7minutesWorkout_kotlin.models.ExerciceModel
 
 class ExerciceStatusAdaptateur(val items: ArrayList<ExerciceModel>) :
     RecyclerView.Adapter<ExerciceStatusAdaptateur.ViewHolder>() {

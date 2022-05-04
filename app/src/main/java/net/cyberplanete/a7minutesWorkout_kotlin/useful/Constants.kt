@@ -1,6 +1,7 @@
 package net.cyberplanete.a7minutesWorkout_kotlin.useful
 
 import net.cyberplanete.a7minutesWorkout_kotlin.R
+import net.cyberplanete.a7minutesWorkout_kotlin.models.ExerciceModel
 
 object Constants {
     val exerciceList = ArrayList<ExerciceModel>()
