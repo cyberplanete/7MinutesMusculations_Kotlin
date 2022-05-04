@@ -30,7 +30,7 @@
             android:button="@null"
             android:checked="true"
             android:gravity="center"
-            android:text="UNITÉ MÉTRIQUE"
+            android:text="UNITÉS MÉTRIQUE"
             android:textColor="@drawable/drawable_rectangulaire_tab_selector_text_color"
             android:textSize="16dp"
             android:textStyle="bold" />
@@ -45,7 +45,7 @@
             android:button="@null"
             android:checked="false"
             android:gravity="center"
-            android:text="UNITÉ US"
+            android:text="US UNITS"
             android:textColor="@drawable/drawable_rectangulaire_tab_selector_text_color"
             android:textSize="16dp"
             android:textStyle="bold" />
