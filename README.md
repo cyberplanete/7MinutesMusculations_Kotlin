@@ -12,7 +12,7 @@ Ajout page pour le calcul d'IMC
 
 ### Android:
 
-
+### Présentation en images:
 <img src="screenshots/screenshot1.png" width="200"> <img src="screenshots/screenshot2.png" width="200">
 
 <img src="screenshots/screenshot3.png" width="200"> <img src="screenshots/screenshot4.png" width="200">
