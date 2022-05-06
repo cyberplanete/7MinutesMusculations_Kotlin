@@ -13,6 +13,7 @@ Ajout page pour le calcul d'IMC
 ### Android:
 
 ![screenshot1](screenshots/screenshot1.png = 100x20) 
+<img src="screenshots/screenshot1.png" width="200">
 ![screenshot2](screenshots/screenshot2.png)
 
 ![screenshot3](screenshots/screenshot3.png)
