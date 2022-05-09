@@ -48,22 +48,24 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         bindingExcerciseActivity = ActivityExerciseBinding.inflate(layoutInflater)
         setContentView(bindingExcerciseActivity?.root)
 
-
-        setSupportActionBar(bindingExcerciseActivity?.toolbarExcercise)
-
-        if (supportActionBar != null) {/* Afficher la fleche pour permettre le retour*/
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
         /* Initialisation de l'exercice par defaut  */
         exerciceList = Constants.defaultExerciceList()
 
+
+        /* Action BAR*/
+        setSupportActionBar(bindingExcerciseActivity?.toolbarExcercise)
+        if (supportActionBar != null) {/* Afficher la fleche pour permettre le retour*/
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.title = "Calcul d'IMC"
+        }
         /* Bouton retour   <-  vers le début de l'exercice  */
         bindingExcerciseActivity?.toolbarExcercise?.setNavigationOnClickListener()
         {
             //onBackPressed()
             customDialogForBackButton()
-
         }
+        /* END - Action BAR*/
+
         /*
         Verification que le timer n'est pas déja en fonctionnement
          */

@@ -13,13 +13,13 @@ import kotlin.math.roundToInt
 
 class IMCActivity : AppCompatActivity() {
 
-    companion object
-    {
+    companion object {
         private const val METRIC_UNITS_VIEW = "METRIC_UNIT_VIEW"
         private const val US_UNITS_VIEW = "US_UNIT_VIEW"
     }
 
-    private var currentVisibleView: String = METRIC_UNITS_VIEW //A variable to hold a value to make a selected view visible
+    private var currentVisibleView: String =
+        METRIC_UNITS_VIEW //A variable to hold a value to make a selected view visible
 
     private var bindingIMC: ActivityImcBinding? = null
 
@@ -49,12 +49,10 @@ class IMCActivity : AppCompatActivity() {
         /**
          * Méthode utiliser pour configurer la page usMetric ou metricFr on fonction du choix sur le bouton radio
          */
-        bindingIMC?.rgUnits?.setOnCheckedChangeListener { _, id : Int ->
-            if (id == bindingIMC?.rbMetricsUnits?.id)
-            {
+        bindingIMC?.rgUnits?.setOnCheckedChangeListener { _, id: Int ->
+            if (id == bindingIMC?.rbMetricsUnits?.id) {
                 makeVisibleMetricUnitsView() // Configuration pour la page metric FR
-            } else
-            {
+            } else {
                 makeVisibleUSMetricUnitsView() // Configuration pour la page metric US
             }
 
@@ -64,25 +62,57 @@ class IMCActivity : AppCompatActivity() {
         /**
          * OnClickListenner SUR le bouton calculIMC
          */
-        bindingIMC?.btnCalculateIMC?.setOnClickListener ()
+        bindingIMC?.btnCalculateIMC?.setOnClickListener()
         {
-            /* vérifie si les données obligatoire pour le calcul sont bien présentent */
-            if (validateMetricUnits())
-            {
-                val heightValue : Float = bindingIMC?.etMetricUnitHeight?.text.toString().toFloat() /100 // La valeur est entrée en Mètre que je divise par 100 pour une valeur en cm
-                val weightValue : Float = bindingIMC?.etMetricUnitWeight?.text.toString().toFloat()
-                /* Formule IMC */
-                val imc : Float = weightValue / (heightValue*heightValue)
+            if (currentVisibleView == METRIC_UNITS_VIEW) {
+                /* vérifie si les données obligatoire pour le calcul sont bien présentent */
+                if (validateMetricUnits()) {
+                    val heightValue: Float = bindingIMC?.etMetricUnitHeight?.text.toString()
+                        .toFloat() / 100 // La valeur est entrée en Mètre que je divise par 100 pour une valeur en cm
+                    val weightValue: Float =
+                        bindingIMC?.etMetricUnitWeight?.text.toString().toFloat()
+                    /* Formule IMC */
+                    val imc: Float = weightValue / (heightValue * heightValue)
 
-                val imcObject = IMCBrain().getIMCObject(imc)
+                    val imcObject = IMCBrain().getIMCObject(imc)
 
-                //TODO affichage du resultat de l'IMC
-                displayIMCResult(imcObject,imc)
+                    //TODO affichage du resultat de l'IMC
+                    displayIMCResult(imcObject, imc)
+                } else {
+                    Toast.makeText(
+                        this@IMCActivity,
+                        "Veuillez entrer des données valides pour le calcul de votre IMC",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             else
             {
-                Toast.makeText(this@IMCActivity, "Veuillez entrer des données valides pour le calcul de votre IMC",Toast.LENGTH_SHORT).show()
+                /* vérifie si les données obligatoire pour le calcul sont bien présentent */
+                if (validateUSMetricUnits()) {
+                    val heightInchValueUS: String = bindingIMC?.etUSMetricHeightInch?.text.toString()
+                    val heightFeetValueUS: Float = bindingIMC?.etUSUnitHeightFeet?.text.toString()
+                        .toFloat() / 100 // La valeur est entrée en Mètre que je divise par 100 pour une valeur en cm
+                    val weightValueUS: Float =
+                        bindingIMC?.etUSMetricWeight?.text.toString().toFloat()
+                    /*Conversion en INCH */
+                    val heightTotalValueInInch = heightInchValueUS.toFloat() + heightFeetValueUS.toFloat() * 12
+                    /* Formule IMC US */
+                    val imc: Float = 703 * (weightValueUS/ (heightTotalValueInInch*heightTotalValueInInch) )
+
+                    val imcObject = IMCBrain().getIMCObject(imc)
+
+                    //TODO affichage du resultat de l'IMC
+                    displayIMCResult(imcObject, imc)
+                } else {
+                    Toast.makeText(
+                        this@IMCActivity,
+                        "Veuillez entrer des données valides pour le calcul de votre IMC",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
+
         }
 
     }
@@ -90,8 +120,7 @@ class IMCActivity : AppCompatActivity() {
     /**
      * Méthode utilisée pour la configuration de la page Metrique FR
      */
-    private fun makeVisibleMetricUnitsView()
-    {
+    private fun makeVisibleMetricUnitsView() {
         currentVisibleView = METRIC_UNITS_VIEW
         bindingIMC?.tilMetricUnitHeight?.visibility = View.VISIBLE
         bindingIMC?.tilMetricUnitWeight?.visibility = View.VISIBLE
@@ -101,18 +130,20 @@ class IMCActivity : AppCompatActivity() {
 
         bindingIMC?.etMetricUnitHeight?.text!!.clear() //Height is cleared
         bindingIMC?.etMetricUnitWeight?.text!!.clear() //Weight is cleared
-        bindingIMC?.llDisplayIMCResult?.visibility = View.INVISIBLE //Resultat est invisible par défaut à chague changement de page
+        bindingIMC?.llDisplayIMCResult?.visibility =
+            View.INVISIBLE //Resultat est invisible par défaut à chague changement de page
 
     }
 
     /**
      * Méthode utilisée pour la configuration de la page Metrique US
      */
-    private fun makeVisibleUSMetricUnitsView()
-    {
+    private fun makeVisibleUSMetricUnitsView() {
         currentVisibleView = US_UNITS_VIEW
-        bindingIMC?.tilMetricUnitHeight?.visibility = View.INVISIBLE // Invisible plutot que gone pour garder le bon positionnement des éléments
-        bindingIMC?.tilMetricUnitWeight?.visibility = View.INVISIBLE // Invisible plutot que gone pour garder le bon positionnement
+        bindingIMC?.tilMetricUnitHeight?.visibility =
+            View.INVISIBLE // Invisible plutot que gone pour garder le bon positionnement des éléments
+        bindingIMC?.tilMetricUnitWeight?.visibility =
+            View.INVISIBLE // Invisible plutot que gone pour garder le bon positionnement
         bindingIMC?.tilUSMetricHeightFeet?.visibility = View.VISIBLE
         bindingIMC?.tilUSMetricWeight?.visibility = View.VISIBLE
         bindingIMC?.tilUSMetricHeightInch?.visibility = View.VISIBLE
@@ -120,7 +151,8 @@ class IMCActivity : AppCompatActivity() {
         bindingIMC?.etUSMetricWeight?.text!!.clear() //Height is cleared
         bindingIMC?.etUSUnitHeightFeet?.text!!.clear() //Weight is cleared
         bindingIMC?.etUSMetricHeightInch?.text!!.clear() //Weight is cleared
-        bindingIMC?.llDisplayIMCResult?.visibility = View.INVISIBLE //Resultat est invisible par défaut à chague changement de page
+        bindingIMC?.llDisplayIMCResult?.visibility =
+            View.INVISIBLE //Resultat est invisible par défaut à chague changement de page
 
     }
 
@@ -128,28 +160,52 @@ class IMCActivity : AppCompatActivity() {
     /**
      * Cette méthode vérifie si les données obligatoires pour le calcul IMC sont bien présentent
      */
-    private fun validateMetricUnits() : Boolean
-    {
+    private fun validateMetricUnits(): Boolean {
         var isValid = true
+
         /* Vérification du champ taille si n'est pas vide */
-        if (bindingIMC?.etMetricUnitHeight?.text.toString().isEmpty())
-        {
+        if (bindingIMC?.etMetricUnitHeight?.text.toString().isEmpty()) {
             isValid = false
         }
         /* Vérification du champ poids si n'est pas vide */
-        else if (bindingIMC?.etMetricUnitWeight?.text.toString().isEmpty())
-        {
+        else if (bindingIMC?.etMetricUnitWeight?.text.toString().isEmpty()) {
             isValid = false
         }
 
         return isValid
+
+
     }
+
+    /**
+     * Cette méthode vérifie si les données obligatoires pour le calcul IMC sont bien présentent
+     */
+    private fun validateUSMetricUnits(): Boolean {
+        var isValid = true
+
+            /* Vérification du champ poids si n'est pas vide */
+            if (bindingIMC?.etUSMetricHeightInch?.text.toString().isEmpty()) {
+                isValid = false
+            }
+            /* Vérification des champs feet ou inch si n'est pas vide */
+            else if (bindingIMC?.etUSMetricWeight?.text.toString().isEmpty()) {
+                isValid = false
+
+            }
+            else if ( bindingIMC?.etUSUnitHeightFeet?.text.toString().isEmpty()) {
+                isValid = false
+
+            }
+            return isValid
+        }
+
+
+
 
     /**
      * Méthode utilisée pour l'affichage du resultat de l'IMC
      */
-    private fun displayIMCResult(imcObject: IMC?, imc: Float?)
-    {
+    private fun displayIMCResult(imcObject: IMC?, imc: Float?) {
         val imcLabel: String
         val imcDescription: String
 

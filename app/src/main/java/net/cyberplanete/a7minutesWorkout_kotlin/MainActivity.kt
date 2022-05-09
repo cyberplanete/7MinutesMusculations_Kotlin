@@ -27,11 +27,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intentExerciceActivity)
         }
 
+        /* Pour afficher la page permettant de calculer l'IMC */
         bindingViewMainActivity?.flIMC?.setOnClickListener()
         {
             val intent = Intent(this, IMCActivity::class.java)
             startActivity(intent)
+        }
 
+        /* Pour afficher la page historique des entrainements */
+        bindingViewMainActivity?.flHistory?.setOnClickListener()
+        {
+            val intent = Intent(this,HistoryActivity::class.java)
+            startActivity(intent)
         }
     }
 

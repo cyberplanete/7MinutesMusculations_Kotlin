@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.7minutesWorkout_kotlin">
         <activity
+            android:name=".HistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".IMCActivity"
             android:exported="false" />
         <activity
