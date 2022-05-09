@@ -2,8 +2,10 @@
 
 Application simple affichant des exercices d'entrainement physique à réaliser dans un laps de temps de 30 secondes 
 
+09-05-2022
+Ajout d'une page pour afficher l'historique des entrainements
 04-05-2022
-Ajout page pour le calcul d'IMC
+Ajout d'une page pour le calcul d'IMC
 
 ### Compatible Android ou Ios
 
