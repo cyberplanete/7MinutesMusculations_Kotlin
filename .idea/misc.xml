@@ -30,6 +30,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.359375" />
         <entry key="app/src/main/res/layout/dialog_custom_back_confirmation.xml" value="0.54375" />
         <entry key="app/src/main/res/layout/item_exercice_status.xml" value="0.30842391304347827" />
+        <entry key="app/src/main/res/layout/item_history_row.xml" value="0.2798913043478261" />
       </map>
     </option>
   </component>

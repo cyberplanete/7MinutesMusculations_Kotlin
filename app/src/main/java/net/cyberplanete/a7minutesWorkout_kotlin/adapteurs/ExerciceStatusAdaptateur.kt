@@ -1,4 +1,4 @@
-package net.cyberplanete.a7minutesWorkout_kotlin.useful
+package net.cyberplanete.a7minutesWorkout_kotlin.adapteurs
 
 import android.graphics.Color
 import android.view.LayoutInflater

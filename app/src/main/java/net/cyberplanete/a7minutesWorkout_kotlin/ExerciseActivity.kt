@@ -11,12 +11,17 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.ActivityExerciseBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.databinding.DialogCustomBackConfirmationBinding
 import net.cyberplanete.a7minutesWorkout_kotlin.useful.Constants
 import net.cyberplanete.a7minutesWorkout_kotlin.models.ExerciceModel
-import net.cyberplanete.a7minutesWorkout_kotlin.useful.ExerciceStatusAdaptateur
+import net.cyberplanete.a7minutesWorkout_kotlin.adapteurs.ExerciceStatusAdaptateur
+import net.cyberplanete.a7minutesWorkout_kotlin.dao.HistoryDAO
+import net.cyberplanete.a7minutesWorkout_kotlin.models.HistoryEntity
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -37,8 +42,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var exerciceStatusAdaptateur: ExerciceStatusAdaptateur? = null
 
-    private var exerciseTimerDuration: Long = 30
-    private var restTimerDuration: Long = 10
+    private var exerciseTimerDuration: Long = 1
+    private var restTimerDuration: Long = 1
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initialize the Text To Speech
@@ -292,6 +297,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 } else /* sinon un message de fécilitation*/ {
                     /* Fermeture de la page exercice*/
                     finish()
+                    val historyDAO = (application as HistoryApp).historyDatabase.historyDAO()
+                    // Ajout de la date de l'exercice dans l'historique à la fin des sessions d'exercices
+                    lifecycleScope.launch { addRecord(historyDAO) }
+
                     /* La page FinishActivity est affichée*/
                     val intent = Intent(
                         this@ExerciseActivity,
@@ -310,6 +319,14 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         }.start()
     }
+
+    private suspend fun addRecord(historyDAO: HistoryDAO)
+    {
+        val simpleDateFormat = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = simpleDateFormat.format(Date()).toString()
+        historyDAO.insert(HistoryEntity(date = currentDate)).toString()
+    }
+
     /**
      ********************************************* Gestion des boutons retour android *************************************
     *                                           Gestion du bouton retour du menu android
