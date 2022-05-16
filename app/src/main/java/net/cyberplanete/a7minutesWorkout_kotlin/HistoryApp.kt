@@ -8,5 +8,5 @@ import net.cyberplanete.a7minutesWorkout_kotlin.dao.HistoryDatabase
 * */
 class HistoryApp : Application()
 {
-    val historyDatabase by lazy { HistoryDatabase.getInstance(this) }
+    val historyDatabase by lazy { HistoryDatabase.getInstance(this) } //Recupération de la base
 }
