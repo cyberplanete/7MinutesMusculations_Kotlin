@@ -322,7 +322,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private suspend fun addRecord(historyDAO: HistoryDAO)
     {
-        val simpleDateFormat = SimpleDateFormat("dd/M/yyyy HH:mm:ss", Locale.FRANCE)
+        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.FRANCE)
         val currentDate = simpleDateFormat.format(Date()).toString()
         historyDAO.insert(HistoryEntity(date = currentDate)).toString()
     }
